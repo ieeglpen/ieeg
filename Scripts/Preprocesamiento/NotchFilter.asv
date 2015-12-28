@@ -1,0 +1,19 @@
+function [NotchFilteredSignal] = NotchFilter(signal,hz2Eliminate,hzWidth,srate)
+
+FS = srate;
+canal_notch_0 = signal;
+
+%Notch
+% wo=hz2Eliminate/(FS/2);
+% bw=wo/10;
+% [b,a]=iirnotch(wo,bw);
+% canal_notch=filter(b,a,canal_notch_0);
+
+%ALTERNATIVE
+EEG = pop_iirfilt( EEG, hz2Eliminate - hzWidth, hz2Eliminate + hzWidth, [], [1]);
+
+canal_notch = 
+
+PlotPowerSpectrum(canal_notch(1,:),srate,'Power Spectrum of Notch Filtered Signal')
+
+NotchFilteredSignal = canal_notch;

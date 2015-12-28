@@ -1,0 +1,23 @@
+function PlotBarGraphFromSubMap(fileName,conditionsMapsStruct,freqs,times,freqsWindow,timeWindow,labels)
+
+conditionNr = size(conditionsMapsStruct,2);
+groupNr = size(conditionsMapsStruct(1).maps,1);
+conditionValues = zeros(groupNr,conditionNr);
+barLegend = 
+
+for i = 1 : conditionNr
+    maps = conditionsMapsStruct(i).maps;
+    meanValues = GetMeanValuesFromSubMaps(maps,freqs,times,freqsWindow,timeWindow);
+    conditionValues(:,i) = meanValues';
+end
+
+figure
+
+hDataSeries = bar(conditionValues);
+
+hLegend = legend(hDataSeries ,{'Blue','Green','Blue','Green''Blue','Green'});
+set(hLegend, 'FontSize',8);
+
+
+saveas(gcf,fileName,'fig');
+saveas(gcf,fileName,'png');

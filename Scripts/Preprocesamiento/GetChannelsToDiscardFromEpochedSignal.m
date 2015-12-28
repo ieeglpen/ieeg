@@ -1,0 +1,51 @@
+function [channels2Discard prechannels2Discard jumps nr_jumps] = GetChannelsToDiscardFromEpochedSignal(signal,doplot)
+
+%INPUT:
+%signal: epoched signal, 1D: channels, 2D: time, 3D: trials
+%OUTPUT
+
+channels2Discard = [];
+prechannels2Discard = [];
+jumps = [];
+nr_jumps = [];
+
+for i = 1 : size(signal,3)
+    i
+    oneEpochSignal = signal(:,:,i); 
+    [e_channels2Discard e_prechannels2Discard e_jumps e_nr_jumps] = GetChannelsToDiscard(oneEpochSignal,doplot);
+    size(e_channels2Discard)
+    size(e_prechannels2Discard)
+    size(e_jumps)
+    size(e_nr_jumps)
+    
+    %arrange results for e_prechannels2Discard
+    prechansTemp = ones(1,size(e_prechannels2Discard,2));
+    prechansTemp = prechansTemp * i;
+    
+    prechans = [prechansTemp' e_prechannels2Discard'];
+    prechannels2Discard = [prechannels2Discard;prechans];
+    
+    %arrange results for e_jumps
+    jumpsTemp = ones(1, size(e_jumps,2));
+    jumpsTemp = jumpsTemp * i;
+    
+    prejumps = [jumpsTemp' e_jumps'];
+    jumps = [jumps;prejumps];
+    
+    %arrange results for nr_jumps
+    nrJumpsTemp = ones(1, size(e_nr_jumps,2));
+    nrJumpsTemp = nrJumpsTemp * i;
+    
+    channelNr = 1:size(e_nr_jumps,2);
+    preNrJumps = [nrJumpsTemp' e_nr_jumps' channelNr'];
+    nr_jumps = [nr_jumps;preNrJumps];
+      
+    
+    %arrange results for channels2Discard
+    channels2DiscardTemp = ones(1, size(e_channels2Discard,2));
+    channels2DiscardTemp = channels2DiscardTemp * i;
+    
+    preChannels2Discard = [channels2DiscardTemp' e_channels2Discard'];
+    channels2Discard = [channels2Discard;preChannels2Discard];
+end
+    

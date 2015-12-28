@@ -1,0 +1,17 @@
+control3 t8 en las tres condiciones
+control1,2,4 5, ninguno
+control 7 t7, t8 y veo en las tres conds
+control 8 ninguno
+control9 t8 y veo quizas en tercer condicion, en las otras nada
+control 10 ninguno
+------------------------------
+alz 1 ninguno
+alz 2 veo solamente
+alz 3 ninguno
+alz 4 ninguno
+alz 5 ninguno, bastante ruidoso
+alz 6 ninguno
+alz 7 ninguno
+alz 8 ninguno
+alz 9 t8 en los tres
+alz 10 ninguno

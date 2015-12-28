@@ -1,0 +1,72 @@
+function [completeConnectionMatrix,labels,timeValues] = PlotPreliminaryResultsOfConnections(signal,connectivityThreshold,titleName,labels,initTime,timeWindow,EEG,Trange,WinSig,BinFreq,Step,path2files,Frange,Fs,tickPercentage)
+
+%plot preliminary results
+[result CumRho CumPhi EjeX EjeF ParElec] = CalculatePLV(path2files, EEG, signal, Fs,Frange, Trange, WinSig, BinFreq,Step);
+
+% mean by frequency
+resultMean = mean(result,3);
+
+if size(timeWindow) == [1 2]    
+    timeWindowColumns = GetColumnIndexOfTimeWindow(EjeX,timeWindow(1,1),timeWindow(1,2));
+    values2Plot = GetValues2Plot(resultMean,timeWindowColumns,connectivityThreshold);
+    
+    timeValues = (EjeX(timeWindowColumns(1,1)) + EjeX(timeWindowColumns(1,2)))/2;
+    
+    %plot de todos los electrodos y de las conexiones con umbral mayor a
+    %threshold    
+    completeTitleName = [titleName '- timeWindow: ' num2str(timeWindow(1,1)) '-' num2str(timeWindow(1,2)) ' - threshold: ' num2str(connectivityThreshold)];
+    %PlotIntracranealsConnections(electrodes,ParElec,values2Plot,completeTitleName);
+else
+    [timeWindowPositions] = GetTimeWindowPositions(EjeX,initTime,timeWindow);
+    timeValues = zeros(1,size(timeWindowPositions,1));
+    completeConnectionMatrix = zeros(size(signal,1),size(timeValues,2));
+    
+    for i = 1 : size(timeWindowPositions,1)
+        
+        timeWindowColumns = timeWindowPositions(i,:);
+        values2Plot = GetValues2Plot(resultMean,timeWindowColumns,connectivityThreshold);
+        
+        timeValues(i) = (EjeX(timeWindowColumns(1,1)) + EjeX(timeWindowColumns(1,2)))/2;
+        
+        %plot de todos los electrodos y de las conexiones con umbral mayor a
+        %threshold
+        completeTitleName = [titleName '(' num2str(connectivityThreshold) ')' num2str(EjeX(timeWindowColumns(1,1))) '-' num2str(EjeX(timeWindowColumns(1,2)))];
+        %PlotIntracranealsConnections(electrodes,ParElec,values2Plot,completeTitleName);
+                
+        matrixSize = size(labels,1);
+        
+        fileID = fopen([completeTitleName '_Connections.txt'],'w');
+        formatSpec = '%s %s %d %d\r\n';
+        
+        for j = 1:length(values2Plot)
+            elec1 = ParElec(values2Plot(j),1);
+            elec2 = ParElec(values2Plot(j),2);
+            fprintf(fileID,formatSpec,labels{elec1},labels{elec2},elec1,elec2);
+        end
+        fclose(fileID);     
+        
+        shortTitleName = [titleName '(' num2str(connectivityThreshold) ')' num2str(round(EjeX(timeWindowColumns(1,1)))) '-' num2str(round(EjeX(timeWindowColumns(1,2))))];
+        connectionMatrix = PrintConnections(matrixSize,[completeTitleName '_Connections.txt'],shortTitleName);        
+        
+        nrOfConnections = sum(connectionMatrix,2);
+        
+        completeConnectionMatrix(:,i) = nrOfConnections;
+        
+        [values indexes] = sort(nrOfConnections,'descend');
+        
+        %input('press a key to continue')
+        
+        fileID2 = fopen([completeTitleName '_ConnectionNr.txt'],'w');
+        formatSpec = '%d\t%s\t%d\r\n';
+        
+        for h = 1:size(connectionMatrix,1)
+            elec = labels{indexes(h)};
+            fprintf(fileID2,formatSpec,indexes(h),elec,values(h));
+        end
+        
+        fclose(fileID2);   
+        
+    end
+    
+    PlotMapAndSave(completeConnectionMatrix,titleName,tickPercentage,timeValues,labels);
+end

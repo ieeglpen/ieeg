@@ -1,0 +1,12 @@
+Para hacer positive FDR:
+
+http://www.mathworks.com/help/bioinfo/ref/mafdr.html
+
+Siguiendo el texto de Srotey 2002 se puede utilizar la función
+
+mafdr(PValues) 
+
+Si se quiere hacer el FDR normal se puede utilizar la misma función pero con la siguiente
+modificación: 
+
+mafdr(pvals_orig,'BHFDR', 1)

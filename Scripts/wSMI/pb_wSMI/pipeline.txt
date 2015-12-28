@@ -1,0 +1,9 @@
+1- load_bdf.m             lee bdf filtra e interpola. interpolar estan en el mismo .m y en interpolar.txt
+2- extracts_epochs.m      (extracts_epochs_continuo.m) corta en epochs. 
+3- reject epochs.m        borra epochs ruidosas por movimientos (no artefacto ocular, poco alta frecuencia). usa archivo epochsadescartar.m
+4- corre_ica.m            calcula componentes ica
+5- reject_ica.m           rechaza componentes oculares
+6- removeica.m
+7- csd
+
+ 

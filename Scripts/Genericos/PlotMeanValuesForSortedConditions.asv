@@ -1,0 +1,88 @@
+function PlotMeanValuesForSortedConditions(fileName,conditionsMapsStruct,condition2sort,colors,freqs,times,freqsWindow,timeWindow,labels,caxisValues)
+
+sortConditionNr = 0;
+conditionNr = size(conditionsMapsStruct,2);
+
+%get position of sort condition
+for i = 1 : conditionNr
+    if strcmp(conditionsMapsStruct(i).name,condition2sort)
+        sortConditionNr = i;
+    end
+end
+
+% if no sort condition is found - throw error
+if sortConditionNr == 0
+    msgID = 'ERROR';
+    msg = ['No se encuentra la condición: ' condition2sort '.'];
+    baseException = MException(msgID,msg);
+    throw(baseException)
+end
+
+[conditionValues barLegend] = CalculateMeanValuesOfSubMap(conditionsMapsStruct,freqs,times,freqsWindow,timeWindow);
+
+%sort mean values of condition
+[sortedValues,sortIndex] = sort(conditionValues(:,sortConditionNr),'descend');
+
+%sort all values
+sortedConditionValues = zeros(size(conditionValues,1),size(conditionValues,2));
+sortedLabels = cell(size(labels));
+
+
+for i = 1 : conditionNr
+    for j = 1 : size(conditionValues,1)
+        sortedConditionValues(j,i) = conditionValues(sortIndex(j),i);        
+    end
+end
+
+for h = 1 : size(labels,1)
+    sortedLabels{h} = labels{sortIndex(h)};
+end
+
+figure
+hDataSeries = bar(conditionValues,1);
+
+hLegend = legend(hDataSeries ,barLegend);
+set(hLegend, 'FontSize',8);
+set(gca,'XTickMode','manual','XTickLabel',labels,'fontsize',8)
+XTickPosition = 1:25;
+set(gca,'XTick',XTickPosition); 
+
+rotateXLabels(gca,90);
+
+colormap(colors)
+
+title(fileName)
+
+if ~isempty(caxisValues)
+    ylim(caxisValues);
+end
+fileName
+%saveas(gcf,fileName,'fig');
+%saveas(gcf,fileName,'png');
+completefileName = strcat(fileName,'.fig');
+eval('save completefileName');
+
+
+figure
+%colormap Winter
+hDataSeries = bar(sortedConditionValues,1);
+
+colormap(colors)
+
+hLegend = legend(hDataSeries ,barLegend);
+set(hLegend, 'FontSize',8);
+set(gca,'XTickMode','manual','XTickLabel',sortedLabels,'fontsize',8)
+XTickPosition = 1:25;
+set(gca,'XTick',XTickPosition); 
+
+rotateXLabels(gca,90);
+
+title(fileName)
+
+if ~isempty(caxisValues)
+    ylim(caxisValues);
+end
+
+sortedFileName = ['sorted' fileName];
+%saveas(gcf,sortedFileName,'fig');
+%saveas(gcf,sortedFileName,'png');

@@ -1,0 +1,11 @@
+Por cada caso tendrás 3 ficheros de EEG (REP/EEG son estado de resting, SS2 y SS3 para tareas con 2 y estímulos en pantalla) y 2 ficheros Log,
+Uno de la tarea SS3 y otro SS2. La tarea SS3 presenta dos condiciones , Shape Only y Shape-Colour Binding cada una con tres estímulos en pantalla.
+ 
+Las Marcas de los ficheros de ERP son:
+ 
+                                                                                                    Study Display (S1)            Test Display (S2)                  Response
+Shape Only (SS3)                                                              11                                                  12                                               13= Correct, 14= Incorrect           
+Shape-Colour Binding (SS2 & 3)                               21                                                  22                                               23= Correct, 24= Incorrect
+ 
+En la carpeta que está subiendo va un fichero .ppt donde te envío el resumen de lo que discutimos la semana pasada. Además ahí te explico la estructura de los Log files.
+ 

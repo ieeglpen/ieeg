@@ -1,0 +1,25 @@
+function [p h zval ranksums] = ranksumForMatrices(mat1,mat2,pvalue)
+
+ rows = size(mat1,1);
+% p = zeros(rows,1);
+% h = zeros(rows,1);
+% zval = zeros(rows,1);
+% ranksum = zeros(rows,1);
+a = [1 1 1 1 1 1 1 1];
+b = a * 2;
+
+for row = 1 : rows
+    mat1temp = mat1(row,:);
+    mat2temp = mat2(row,:);
+%     display('mat1temp')
+%     size(mat1temp)
+%     display('mat2temp')
+%     size(mat2temp)
+    [pval,hval,statsval] = ranksum(a,b);
+%     p(row) = pval;
+%     h(row) = hval;
+%     %zval(row,1) = statsval.zval;
+%     ranksum(row) = statsval.ranksum;
+end
+
+    

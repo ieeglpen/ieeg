@@ -1,0 +1,53 @@
+function CreateEdgeFileAndConnectionList(mat,Tmax,Tmin,labels,titleName)
+
+chanNr = size(mat,1);
+
+%plot files for BrainNetViewer
+threshold = Tmax;
+
+binarizedMatrixTMax = mat;
+binarizedMatrixTMax(binarizedMatrixTMax < threshold) = 0;
+binarizedMatrixTMax(binarizedMatrixTMax ~= 0) = 1;
+
+% signifMatrixMax = binarizedMatrixTMax.*pmask;
+% signifMatrixMax2print = GetWeightedEdgeMatrixForBrainNetViewer(signifMatrixMax,pvalue);
+% signifMatNameFile = [titleName 'Max'];
+% PrintEdgeFile(signifMatNameFile,signifMatrixMax2print);
+
+%plot files for BrainNetViewer
+threshold = Tmin;
+
+binarizedMatrixTMin = mat;
+binarizedMatrixTMin(binarizedMatrixTMin > threshold) = 0;
+binarizedMatrixTMin(binarizedMatrixTMin ~= 0) = 1;
+
+% signifMatrixMin = binarizedMatrixTMin.*pmask;
+% signifMatrixMin2print = GetWeightedEdgeMatrixForBrainNetViewer(signifMatrixMin,pvalue);
+% signifMatNameFile = [titleName 'Min'];
+% PrintEdgeFile(signifMatNameFile,signifMatrixMin2print);
+
+connectionMatrixMin = binarizedMatrixTMin;
+connectionMatrixMax = binarizedMatrixTMax*2;
+
+connectionMatrix = connectionMatrixMax + connectionMatrixMin;
+connectionMatrix(logical(eye(size(connectionMatrix)))) = 0;
+
+%PrintNodeFile(electrodeInfoFile,anatomicFile,connectionMatrix,titleName,nodeSpecStruct,'condition');
+PrintEdgeFile(titleName,connectionMatrix);
+
+connMatrix2Print = connectionMatrix.*triu(~eye(chanNr));
+
+fileID = fopen([titleName '.txt'],'w');
+formatSpec = '%s\t%s\t%d\r\n';
+%formatSpec = '%.1f\t%.1f\t%.1f\t%d\t%d\t%s\r\n';  
+
+for i = 1 : chanNr
+    for j = 1 : chanNr
+        val = 
+        
+    text2Print = [num2str(x(i)) ' ' num2str(y(i)) ' ' num2str(z(i)) ' ' color2print ' ' size2print ' ' neuroanatomicarea{i} ];
+    fprintf(fileID,formatSpec,text2Print);
+end
+
+fclose(fileID);
+
